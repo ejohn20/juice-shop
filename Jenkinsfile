@@ -6,7 +6,7 @@ pipeline {
         sh '''npm install
 npm install eslint-plugin-security
 npm install dependency-check
-npm install solarlint'''
+npm install sonarlint'''
         input(message: 'Manual Security Review', id: 'sec1')
       }
     }
