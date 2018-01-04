@@ -25,7 +25,7 @@ npm install sonarlint'''
         stage('Dependency Check') {
           steps {
             sh './node_modules/.bin/dependency-check package.json app.js server.js'
-            sh './node_modules/.bin/dependency-check --unused package.json app.js server.js'
+            sh './node_modules/.bin/dependency-check --unused --ignore package.json app.js server.js'
           }
         }
       }
