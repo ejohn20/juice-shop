@@ -12,7 +12,7 @@ npm install sonarlint'''
     }
     stage('Test') {
       steps {
-        sh 'npm test eslint-plugin-security'
+        sh 'npm test'
       }
     }
     stage('Acceptance') {
