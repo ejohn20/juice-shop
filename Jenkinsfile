@@ -11,8 +11,23 @@ npm install sonarlint'''
       }
     }
     stage('Test') {
-      steps {
-        sh 'npm test'
+      parallel {
+        stage('Test') {
+          steps {
+            sh 'npm test'
+          }
+        }
+        stage('ESLint Test') {
+          steps {
+            sh 'echo "eslint"'
+          }
+        }
+        stage('Dependency Check') {
+          steps {
+            sh 'dependency-check ./package.json'
+            sh 'dependency-check ./package.json --unused'
+          }
+        }
       }
     }
     stage('Acceptance') {
