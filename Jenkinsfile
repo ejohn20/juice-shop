@@ -12,7 +12,7 @@ npm install sonarlint'''
     }
     stage('Test') {
       parallel {
-        stage('Test') {
+        stage('App Tests') {
           steps {
             sh 'npm test'
           }
@@ -26,6 +26,9 @@ npm install sonarlint'''
           steps {
             sh './node_modules/.bin/dependency-check package.json app.js server.js'
             sh './node_modules/.bin/dependency-check --unused --ignore package.json app.js server.js'
+            dependencyCheckAnalyzer datadir: 'dependency-check-data', isFailOnErrorDisabled: true, hintsFile: '', includeCsvReports: false, includeHtmlReports: false, includeJsonReports: false, isAutoupdateDisabled: false, outdir: '', scanpath: '', skipOnScmChange: false, skipOnUpstreamChange: false, suppressionFile: '', zipExtensions: ''
+            dependencyCheckPublisher canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''
+            archiveArtifacts allowEmptyArchive: true, artifacts: '**/dependency-check-report.xml', onlyIfSuccessful: true
           }
         }
       }
