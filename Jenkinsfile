@@ -6,7 +6,6 @@ pipeline {
         sh 'npm install'
         sh 'npm install eslint-plugin-security'
         sh 'npm install dependency-check'
-        sh 'npm install sonarlint'
         input(message: 'Manual Security Review', id: 'sec1')
       }
     }
@@ -30,7 +29,7 @@ pipeline {
         }
         stage('Dependency Check Plugin') {
           steps {
-            dependencyCheckAnalyzer(datadir: './dependency-check-data', hintsFile: './dependencycheck-base-hint.xml', includeCsvReports: true, includeHtmlReports: true, includeJsonReports: true, outdir: './', scanpath: './', skipOnScmChange: true, skipOnUpstreamChange: true, suppressionFile: './suppressed_issues.xml', zipExtensions: '.zip', includeVulnReports: true)
+            dependencyCheckAnalyzer(datadir: './dependency-check-data', autoUpdate: true, hintsFile: './dependencycheck-base-hint.xml', includeCsvReports: true, includeHtmlReports: true, includeJsonReports: true, outdir: './', scanpath: './', skipOnScmChange: true, skipOnUpstreamChange: true, suppressionFile: './suppressed_issues.xml', zipExtensions: '.zip', includeVulnReports: true)
             dependencyCheckPublisher()
             archiveArtifacts(allowEmptyArchive: true, artifacts: '**/dependency-check-report.xml', onlyIfSuccessful: true)
           }
