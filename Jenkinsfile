@@ -30,7 +30,7 @@ pipeline {
         }
         stage('Dependency Check Plugin') {
           steps {
-            dependencyCheckAnalyzer(datadir: 'dependency-check-data', isAutoupdateDisabled: false, isFailOnErrorDisabled: true, hintsFile: '', includeCsvReports: false, includeHtmlReports: false, includeJsonReports: false, outdir: '', scanpath: '', skipOnScmChange: false, skipOnUpstreamChange: false, suppressionFile: '', zipExtensions: '')
+            dependencyCheckAnalyzer(datadir: 'dependency-check-data', isAutoupdateDisabled: false, hintsFile: '', includeCsvReports: false, includeHtmlReports: false, includeJsonReports: false, outdir: '', scanpath: '', skipOnScmChange: false, skipOnUpstreamChange: false, suppressionFile: '', zipExtensions: '')
             dependencyCheckPublisher(canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: '')
             archiveArtifacts(allowEmptyArchive: true, artifacts: '**/dependency-check-report.xml', onlyIfSuccessful: true)
           }
