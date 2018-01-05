@@ -3,10 +3,10 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh '''npm install
-npm install eslint-plugin-security
-npm install dependency-check
-npm install sonarlint'''
+        sh 'npm install'
+        sh 'npm install eslint-plugin-security'
+        sh 'npm install dependency-check'
+        sh 'npm install sonarlint'
         input(message: 'Manual Security Review', id: 'sec1')
       }
     }
@@ -28,11 +28,11 @@ npm install sonarlint'''
             sh './node_modules/.bin/dependency-check --unused --ignore package.json app.js server.js'
           }
         }
-        stage('Dependency Check') {
+        stage('Dependency Check Plugin') {
           steps {
-            dependencyCheckAnalyzer datadir: 'dependency-check-data', isFailOnErrorDisabled: true, hintsFile: '', includeCsvReports: false, includeHtmlReports: false, includeJsonReports: false, isAutoupdateDisabled: false, outdir: '', scanpath: '', skipOnScmChange: false, skipOnUpstreamChange: false, suppressionFile: '', zipExtensions: ''
-            dependencyCheckPublisher canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''
-            archiveArtifacts allowEmptyArchive: true, artifacts: '**/dependency-check-report.xml', onlyIfSuccessful: true
+            dependencyCheckAnalyzer(datadir: 'dependency-check-data', isFailOnErrorDisabled: true, hintsFile: '', includeCsvReports: false, includeHtmlReports: false, includeJsonReports: false, isAutoupdateDisabled: false, outdir: '', scanpath: '', skipOnScmChange: false, skipOnUpstreamChange: false, suppressionFile: '', zipExtensions: '')
+            dependencyCheckPublisher(canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: '')
+            archiveArtifacts(allowEmptyArchive: true, artifacts: '**/dependency-check-report.xml', onlyIfSuccessful: true)
           }
         }
       }
