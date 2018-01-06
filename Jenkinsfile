@@ -24,7 +24,7 @@ pipeline {
         stage('Dependency Check') {
           steps {
             sh 'mkdir dependency-check-output'
-            sh './node_modules/.bin/dependency-check --enableRetired --disableBundleAudit -f ALL -o ./dependency-check-output --project="JuiceShop" package.json app.js server.js'
+            sh './node_modules/.bin/dependency-check -s ./ --enableRetired --disableBundleAudit -f ALL -o ./dependency-check-output/ --project="JuiceShop" package.json app.js server.js'
           }
         }
       }
