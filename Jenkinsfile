@@ -23,15 +23,8 @@ pipeline {
         }
         stage('Dependency Check') {
           steps {
-            sh './node_modules/.bin/dependency-check package.json app.js server.js'
-            sh './node_modules/.bin/dependency-check --unused --ignore package.json app.js server.js'
-          }
-        }
-        stage('Dependency Check Plugin') {
-          steps {
-            dependencyCheckAnalyzer(datadir: './dependency-check-data', isAutoupdateDisabled: false, hintsFile: './dependencycheck-base-hint.xml', includeCsvReports: true, includeHtmlReports: true, includeJsonReports: true, outdir: './', scanpath: './', skipOnScmChange: true, skipOnUpstreamChange: true, suppressionFile: './suppressed_issues.xml', zipExtensions: '.zip', includeVulnReports: true)
-            dependencyCheckPublisher()
-            archiveArtifacts(allowEmptyArchive: true, artifacts: '**/dependency-check-report.xml', onlyIfSuccessful: true)
+            sh 'makedir dependency-check-output'
+            sh './node_modules/.bin/dependency-check --enableRetired --disableBundleAudit -f ALL -o ./dependency-check-output --project="JuiceShop" package.json app.js server.js'
           }
         }
       }
