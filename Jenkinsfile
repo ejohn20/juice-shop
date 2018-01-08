@@ -5,27 +5,35 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'npm install eslint-plugin-security'
-        sh 'npm install dependency-check'
-        input(message: 'Manual Security Review', id: 'sec1')
+        dir /juice-shop {
+          sh 'npm install eslint-plugin-security'
+          sh 'npm install dependency-check'
+          input(message: 'Manual Security Review', id: 'sec1')
+        }
       }
     }
     stage('Test') {
       parallel {
         stage('App Tests') {
           steps {
-            sh 'npm test'
+            dir /juice-shop {
+              sh 'npm test'
+            }
           }
         }
         stage('ESLint Test') {
           steps {
-            sh './node_modules/eslint/bin/eslint.js server.js app.js package.json'
+            dir /juice-shop {
+              sh './node_modules/eslint/bin/eslint.js server.js app.js package.json'
+            }
           }
         }
         stage('NPM Dependency Check') {
           steps {
-            sh './node_modules/.bin/dependency-check package.json app.js server.js'
-            sh './node_modules/.bin/dependency-check --unused --ignore package.json app.js server.js'
+            dir /juice-shop {
+              sh './node_modules/.bin/dependency-check package.json app.js server.js'
+              sh './node_modules/.bin/dependency-check --unused --ignore package.json app.js server.js'
+            }
           }
         }
       }
@@ -42,7 +50,7 @@ pipeline {
     }
     stage('Cleanup') {
       steps {
-        cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, cleanWhenNotBuilt: true, cleanWhenSuccess: true, cleanWhenUnstable: true)
+        sh "clean"
       }
     }
   }
