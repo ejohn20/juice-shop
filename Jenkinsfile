@@ -1,5 +1,7 @@
 pipeline {
-  agent any
+  agent {
+    docker { image 'node:9.3.0' }
+  }
   stages {
     stage('Build') {
       steps {
@@ -18,13 +20,13 @@ pipeline {
         }
         stage('ESLint Test') {
           steps {
-            sh 'echo "eslint"'
+            sh './node_modules/eslint/bin/eslint.js server.js app.js package.json'
           }
         }
-        stage('Dependency Check') {
+        stage('NPM Dependency Check') {
           steps {
-            sh 'mkdir dependency-check-output'
-            sh './node_modules/.bin/dependency-check -s ./ --enableRetired --disableBundleAudit -f ALL -o ./dependency-check-output/ --project="JuiceShop" package.json app.js server.js'
+            sh './node_modules/.bin/dependency-check package.json app.js server.js'
+            sh './node_modules/.bin/dependency-check --unused --ignore package.json app.js server.js'
           }
         }
       }
