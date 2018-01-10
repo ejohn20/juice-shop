@@ -12,7 +12,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'npm install --unsafe-perm'
+        sh 'npm install --production --unsafe-perm'
         sh 'npm install --unsafe-perm eslint-plugin-security'
         sh 'npm install --unsafe-perm dependency-check'
         input(message: 'Manual Security Review', id: 'sec1')
