@@ -1,5 +1,10 @@
 pipeline {
-  agent any
+  agent
+    node {          
+      label 'master'
+      customWorkspace '/var/lib/jenkins/workspace/juice-shop-deploy'
+    }
+  }
   environment {
     CI = 'true'
     npm_config_cache = 'npm-cache'
