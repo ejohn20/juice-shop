@@ -1,5 +1,5 @@
 pipeline {
-  agent
+  agent {
     node {          
       label 'master'
       customWorkspace '/var/lib/jenkins/workspace/juice-shop-deploy'
