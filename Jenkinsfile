@@ -20,22 +20,20 @@ pipeline {
       }
     }
     stage('Test') {
-      parallel {
-        stage('App Tests') {
-          steps {
-            sh 'npm test'
-          }
+      stage('App Tests') {
+        steps {
+          sh 'npm test'
         }
-        stage('ESLint Test') {
-          steps {
-            sh './node_modules/eslint/bin/eslint.js server.js app.js'
-          }
+      }
+      stage('ESLint Test') {
+        steps {
+          sh './node_modules/eslint/bin/eslint.js server.js app.js'
         }
-        stage('NPM Dependency Check') {
-          steps {
-            sh './node_modules/.bin/dependency-check package.json app.js server.js'
-            sh './node_modules/.bin/dependency-check --unused --ignore package.json app.js server.js'
-          }
+      }
+      stage('NPM Dependency Check') {
+        steps {
+          sh './node_modules/.bin/dependency-check package.json app.js server.js'
+          sh './node_modules/.bin/dependency-check --unused --ignore package.json app.js server.js'
         }
       }
     }
