@@ -16,6 +16,6 @@ LABEL maintainer="Bjoern Kimminich <bjoern.kimminich@owasp.org>" \
       org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.schema-version="1.0.0-rc1"
 WORKDIR /juice-shop
-COPY /juice-shop .
+COPY /var/lib/jenkins/workspace/juice-shop /juice-shop
 EXPOSE  3000
 CMD ["npm", "start"]
