@@ -13,6 +13,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
+        sh 'npm config set cache /tmp'
         sh 'npm install'
         sh 'npm install eslint-plugin-security'
         sh 'npm install dependency-check'
