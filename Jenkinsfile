@@ -28,7 +28,7 @@ pipeline {
         }
         stage('ESLint Test') {
           steps {
-            sh './node_modules/eslint/bin/eslint.js server.js app.js package.json'
+            sh './node_modules/eslint/bin/eslint.js server.js app.js'
           }
         }
         stage('NPM Dependency Check') {
