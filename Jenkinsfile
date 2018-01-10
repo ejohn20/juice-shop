@@ -3,6 +3,7 @@ pipeline {
     docker {
       image 'node:9.3'
       args '-p 3000:3000'
+      customWorkspace '/var/lib/jenkins/workspace/juice-shop'
     }
   }
   environment {
