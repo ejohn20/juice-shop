@@ -47,6 +47,11 @@ pipeline {
     stage('Deploy') {
       steps {
         sh 'echo "Deploy"'
+        agent {
+          dockerfile {
+            fileName 'dockerfile.deploy'
+          }
+        }
       }
     }
     stage('Cleanup') {
