@@ -59,9 +59,9 @@ pipeline {
     }
     stage('Acceptance') {
       steps {
-        sh 'npm start'
+        sh 'pm2 start server.js'
         sh 'docker run -t owasp/zap2docker-stable zap-baseline.py -t http://localhost:3000'
-        sh 'npm stop'
+        sh 'pm2 stop server'
       }
     }
     stage('Deploy') {
