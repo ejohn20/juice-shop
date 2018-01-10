@@ -20,24 +20,36 @@ pipeline {
       }
     }
     stage('Test') {
-      agent {
-        node {          
-          label 'master'
-          customWorkspace '/var/lib/jenkins/workspace/juice-shop-deploy'
-        }
-      }
       parallel {
         stage('App Tests') {
+          agent {
+            node {          
+              label 'master'
+              customWorkspace '/var/lib/jenkins/workspace/juice-shop-deploy'
+            }
+          }
           steps {
             sh 'npm test'
           }
         }
         stage('ESLint Test') {
+          agent {
+            node {          
+              label 'master'
+              customWorkspace '/var/lib/jenkins/workspace/juice-shop-deploy'
+            }
+          }
           steps {
             sh './node_modules/eslint/bin/eslint.js server.js app.js'
           }
         }
         stage('NPM Dependency Check') {
+          agent {
+            node {          
+              label 'master'
+              customWorkspace '/var/lib/jenkins/workspace/juice-shop-deploy'
+            }
+          }
           steps {
             sh './node_modules/.bin/dependency-check package.json app.js server.js'
             sh './node_modules/.bin/dependency-check --unused --ignore package.json app.js server.js'
