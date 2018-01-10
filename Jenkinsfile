@@ -12,7 +12,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        pwd
+        sh 'pwd'
         sh 'npm install'
         sh 'npm install eslint-plugin-security'
         sh 'npm install dependency-check'
