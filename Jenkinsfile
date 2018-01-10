@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'node:9.3'
+      image 'node:9.3-alpine'
       args '-p 3000:3000 -u node'
       customWorkspace '/var/lib/jenkins/workspace/juice-shop'
     }
