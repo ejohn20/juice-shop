@@ -1,17 +1,17 @@
 pipeline {
-  agent {
-    docker {
-      image 'node:9.3'
-      args '-p 3000:3000 -u root'
-      customWorkspace '/var/lib/jenkins/workspace/juice-shop'
-    }
-  }
+  agent none
   environment {
     CI = 'true'
     npm_config_cache = 'npm-cache'
   }
   stages {
     stage('Build') {
+      agent {
+        node {          
+          label 'master'
+          customWorkspace '/var/lib/jenkins/workspace/juice-shop-deploy'
+        }
+      }
       steps {
         sh 'npm install --unsafe-perm'
         sh 'npm install --unsafe-perm eslint-plugin-security'
@@ -20,6 +20,12 @@ pipeline {
       }
     }
     stage('Test') {
+      agent {
+        node {          
+          label 'master'
+          customWorkspace '/var/lib/jenkins/workspace/juice-shop-deploy'
+        }
+      }
       parallel {
         stage('App Tests') {
           steps {
@@ -46,7 +52,7 @@ pipeline {
     }
     stage('Deploy') {
       agent {
-        node {
+        node {          
           label 'master'
           customWorkspace '/var/lib/jenkins/workspace/juice-shop-deploy'
         }
