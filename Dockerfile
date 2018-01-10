@@ -1,8 +1,4 @@
-FROM node:8 as installer
-WORKDIR /var/lib/jenkins/workspace/juice-shop
-RUN npm install --production --unsafe-perm
-
-FROM node:8-alpine
+FROM node:9.3-alpine
 ARG BUILD_DATE
 ARG VCS_REF
 LABEL maintainer="Bjoern Kimminich <bjoern.kimminich@owasp.org>" \
@@ -20,6 +16,6 @@ LABEL maintainer="Bjoern Kimminich <bjoern.kimminich@owasp.org>" \
       org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.schema-version="1.0.0-rc1"
 WORKDIR /juice-shop
-COPY --from=installer /juice-shop .
+COPY /juice-shop .
 EXPOSE  3000
 CMD ["npm", "start"]

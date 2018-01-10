@@ -44,15 +44,10 @@ pipeline {
         sh 'echo "Acceptance"'
       }
     }
-    agent {
-      dockerfile {
-        fileName 'dockerfile.deploy'
+    stage('Deploy') {
+      steps {
+        sh 'echo "Deploy"'
       }
-      stage('Deploy') {
-        steps {
-          sh 'echo "Deploy"'
-        }
-      } 
     }
     stage('Cleanup') {
       steps {
