@@ -46,7 +46,7 @@ pipeline {
     stage('Deploy') {
       steps {
         sh 'docker build . -t sdlc_demo:juiceshop'
-        sh 'docker run -p 3000:3000 sdlc_demo:juiceshop -d'
+        sh 'docker run -d -p 3000:3000 sdlc_demo:juiceshop'
       }
     }
     stage('Cleanup') {
