@@ -44,14 +44,9 @@ pipeline {
       }
     }
     stage('Deploy') {
-      agent {
-        node {          
-          label 'master'
-          customWorkspace '/var/lib/jenkins/workspace/juice-shop-deploy'
-        }
-      }
       steps {
-        sh 'docker run -d'
+        sh 'docker build . -t sdlc_demo:juiceshop'
+        sh 'docker run sdlc_demo:juiceshop -d'
       }
     }
     stage('Cleanup') {
