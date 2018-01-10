@@ -45,6 +45,12 @@ pipeline {
       }
     }
     stage('Deploy') {
+      agent {
+        node {
+          label 'master'
+          customWorkspace '/var/lib/jenkins/workspace/juice-shop'
+        }
+      }
       steps {
         sh 'docker run -d'
       }
