@@ -2,7 +2,7 @@ pipeline {
   agent {
     docker {
       image 'node:9.3-alpine'
-      args '-p 3000:3000 -u node'
+      args '-p 3000:3000 -u root'
       customWorkspace '/var/lib/jenkins/workspace/juice-shop'
     }
   }
@@ -13,9 +13,9 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'npm install'
-        sh 'npm install eslint-plugin-security'
-        sh 'npm install dependency-check'
+        sh 'npm install --unsafe-perm'
+        sh 'npm install --unsafe-perm eslint-plugin-security'
+        sh 'npm install --unsafe-perm dependency-check'
         input(message: 'Manual Security Review', id: 'sec1')
       }
     }
