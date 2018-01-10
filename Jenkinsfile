@@ -8,11 +8,11 @@ pipeline {
   }
   environment {
     CI = 'true'
+    npm_config_cache = 'npm-cache'
   }
   stages {
     stage('Build') {
       steps {
-        sh 'pwd'
         sh 'npm install'
         sh 'npm install eslint-plugin-security'
         sh 'npm install dependency-check'
