@@ -48,7 +48,7 @@ pipeline {
       agent {
         node {
           label 'master'
-          customWorkspace '/var/lib/jenkins/workspace/juice-shop'
+          customWorkspace '/var/lib/jenkins/workspace/juice-shop-deploy'
         }
       }
       steps {
