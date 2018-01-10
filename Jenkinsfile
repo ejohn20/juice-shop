@@ -46,7 +46,7 @@ pipeline {
     }
     stage('Deploy') {
       steps {
-        sh 'echo "Deploy"'
+        sh 'docker run -d'
       }
     }
     stage('Cleanup') {
