@@ -62,6 +62,7 @@ pipeline {
         sh 'pm2 start app.js'
         sh 'docker run --network="host" -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:3000'
         sh 'pm2 stop app'
+        sh 'pm2 delete app'
       }
     }
     stage('Deploy') {
