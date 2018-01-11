@@ -60,7 +60,11 @@ pipeline {
     stage('Acceptance') {
       steps {
         sh 'pm2 start app --name "Juice-Shop"'
-        sh 'docker run --network="host" -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:3000'
+        try {
+          sh 'docker run --network="host" -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:3000'
+        } catch(Exception e) {
+          currentBuild.result = 'UNSTABLE'
+        }
         sh 'pm2 stop Juice-Shop'
         sh 'pm2 delete Juice-Shop'
       }
