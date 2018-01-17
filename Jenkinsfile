@@ -78,7 +78,7 @@ pipeline {
           try{
             sh 'docker stop JuiceShop'
             sh 'docker rm JuiceShop'
-          } catch(Exception e)
+          } catch(Exception e) {
             sh 'echo "No previously deployed container."'
           } finally {
             sh 'docker build . -t sdlc_demo:juiceshop'
