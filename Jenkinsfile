@@ -74,10 +74,16 @@ pipeline {
     }
     stage('Deploy') {
       steps {
-        sh 'docker stop JuiceShop'
-        sh 'docker rm JuiceShop'
-        sh 'docker build . -t sdlc_demo:juiceshop'
-        sh 'docker run -d -p 8888:3000 sdlc_demo:juiceshop --name JuiceShop'
+        script{
+          try{
+            sh 'docker stop JuiceShop'
+            sh 'docker rm JuiceShop'
+          } catch(Exception e)
+            sh 'echo "No previously deployed container."'
+          } finally {
+            sh 'docker build . -t sdlc_demo:juiceshop'
+            sh 'docker run -d -p 8888:3000 sdlc_demo:juiceshop --name JuiceShop'
+        }
       }
     }
     stage('Cleanup') {
