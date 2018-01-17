@@ -82,7 +82,7 @@ pipeline {
             sh 'echo "No previously deployed container."'
           } finally {
             sh 'docker build . -t sdlc_demo:juiceshop'
-            sh 'docker run -d -p 8888:3000 sdlc_demo:juiceshop --name JuiceShop'
+            sh 'docker run -d -p 8888:3000 --name JuiceShop sdlc_demo:juiceshop'
           }
         }
       }
