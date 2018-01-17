@@ -83,6 +83,7 @@ pipeline {
           } finally {
             sh 'docker build . -t sdlc_demo:juiceshop'
             sh 'docker run -d -p 8888:3000 sdlc_demo:juiceshop --name JuiceShop'
+          }
         }
       }
     }
