@@ -22,7 +22,7 @@ pipeline {
           agent {
             docker {
               image 'node:9.3'
-              args '-p 3000:3000 -u root'
+              args '-p 4000:3000 -u root'
             }
           }
           steps {
@@ -34,7 +34,7 @@ pipeline {
           agent {
             docker {
               image 'node:9.3'
-              args '-p 3000:3000 -u root'
+              args '-p 4000:3000 -u root'
             }
           }
           steps {
@@ -46,7 +46,7 @@ pipeline {
           agent {
             docker {
               image 'node:9.3'
-              args '-p 3000:3000 -u root'
+              args '-p 4000:3000 -u root'
             }
           }
           steps {
@@ -74,8 +74,10 @@ pipeline {
     }
     stage('Deploy') {
       steps {
+        sh 'docker stop JuiceShop'
+        sh 'docker rm JuiceShop'
         sh 'docker build . -t sdlc_demo:juiceshop'
-        sh 'docker run -d -p 3000:3000 sdlc_demo:juiceshop'
+        sh 'docker run -d -p 8888:3000 sdlc_demo:juiceshop --name JuiceShop'
       }
     }
     stage('Cleanup') {
