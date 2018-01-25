@@ -3,6 +3,11 @@ pipeline {
     node {          
       label 'master'
       customWorkspace '/var/lib/jenkins/workspace/juice-shop'
+      withCredentials([string(credentialsId: 'SRCCLR_API_TOKEN', variable: 'SRCCLR_API_TOKEN')]) {
+        sh '''
+          echo $SRCCLR_API_TOKEN
+        '''
+      }
     }
   }
   environment {
@@ -50,7 +55,7 @@ pipeline {
             script{
               try {
                 sh 'srcclr scan'
-                sh "srcclr scan --json > ${env.outputDir}/scrclr.json"
+                sh "srcclr scan --json > ${env.outputDir}/srcclr.json"
               } catch(Exception e) {
                 currentBuild.result = 'UNSTABLE'
               }
