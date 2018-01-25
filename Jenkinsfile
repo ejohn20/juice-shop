@@ -14,7 +14,7 @@ pipeline {
     stage('Build') {
       steps {
         sh "mkdir -p ${env.outputDir}"
-        sh "npm install --production --unsafe-perm -q &> ${env.outputDir}/npm_install_log"
+        sh "npm install --production --unsafe-perm -q > ${env.outputDir}/npm_install_log 2>&1"
         sh "cat ${env.outputDir}/install_log | grep 'WARN' > ${env.outputDir}/npm_install_warnings"
         //input(message: 'Manual Security Review', id: 'sec1')
       }
