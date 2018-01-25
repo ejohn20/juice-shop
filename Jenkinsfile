@@ -13,8 +13,8 @@ pipeline {
     stage('Build') {
       steps {
         script{
-          def outputDir = new File( "/var/build_output/build_${env.BUILD_ID}" )
-          if( !folder.exists() ) {
+          def outputDir = "/var/lib/jenkins/build_output/build_${env.BUILD_ID}"
+          if( !outputDir.exists() ) {
             outputDir.mkdirs()
           }
           sh "npm install -q --production --unsafe-perm &> ${outputDir}/install_log"
