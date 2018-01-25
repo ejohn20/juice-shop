@@ -50,11 +50,13 @@ pipeline {
         }
         stage('Source Clear Dependency Check') {
           steps {
-            try {
-              sh 'srcclr scan'
-              sh "srcclr scan --json > ${outputDir}/scrclr.json"
-            } catch(Exception e) {
-              currentBuild.result = 'UNSTABLE'
+            script{
+              try {
+                sh 'srcclr scan'
+                sh "srcclr scan --json > ${outputDir}/scrclr.json"
+              } catch(Exception e) {
+                currentBuild.result = 'UNSTABLE'
+              }
             } 
           }
         }
