@@ -14,9 +14,9 @@ pipeline {
       steps {
         script{
           def outputDir = '${env.BUILD_ID}'
+          sh 'mkdir /var/build_output/build_${outputDir}'
+          sh 'npm install -q --production --unsafe-perm > /var/build_output/build_${outputDir}/install_log 2>&1 | tee -a /var/build_output/build_${outputDir}/install_log'
         }
-        sh 'mkdir /var/build_output/build_${outputDir}'
-        sh 'npm install -q --production --unsafe-perm > /var/build_output/build_${outputDir}/install_log 2>&1 | tee -a /var/build_output/build_${outputDir}/install_log'
         //input(message: 'Manual Security Review', id: 'sec1')
       }
     }
