@@ -14,9 +14,7 @@ pipeline {
       steps {
         script{
           def outputDir = "/var/lib/jenkins/build_output/build_${env.BUILD_ID}"
-          if( !outputDir.exists() ) {
-            outputDir.mkdirs()
-          }
+          sh "mkdir -p ${outputDir}"
           sh "npm install -q --production --unsafe-perm &> ${outputDir}/install_log"
         }
         //input(message: 'Manual Security Review', id: 'sec1')
