@@ -12,7 +12,9 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        def outputDir = '${env.BUILD_NUMBER}'
+        script{
+          def outputDir = '${env.BUILD_NUMBER}'
+        }
         sh 'mkdir /var/build_output/build_${outputDir}'
         sh 'npm install -q --production --unsafe-perm > /var/build_output/build_${outputDir}/install_log 2>&1 | tee -a /var/build_output/build_${outputDir}/install_log'
         //input(message: 'Manual Security Review', id: 'sec1')
