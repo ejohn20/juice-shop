@@ -5,7 +5,7 @@ pipeline {
       customWorkspace '/var/lib/jenkins/workspace/juice-shop'
       withCredentials([
         [$class: 'StringBinding', credentialsId: 'SRCCLR_API_TOKEN', variable: 'SRCCLR_API_TOKEN']
-      ]
+      ])
     }
   }
   environment {
