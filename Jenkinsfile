@@ -12,7 +12,9 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'npm install --production --unsafe-perm'
+        env.outputDir = '${env.BUILD_NUMBER}'
+        sh 'mkdir /var/build_output/build_${env.outputDir}'
+        sh 'npm install -q --production --unsafe-perm > /var/build_output/build_${env.outputDir}/install_log 2>&1 | tee -a /var/build_output/build_${env.outputDir}/install_log'
         //input(message: 'Manual Security Review', id: 'sec1')
       }
     }
