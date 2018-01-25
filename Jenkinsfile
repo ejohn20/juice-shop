@@ -1,4 +1,7 @@
 pipeline {
+  script{
+    def outputDir = "/var/lib/jenkins/build_output/build_${env.BUILD_ID}"
+  }
   agent {
     node {          
       label 'master'
@@ -12,12 +15,9 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        script{
-          def outputDir = "/var/lib/jenkins/build_output/build_${env.BUILD_ID}"
-          sh "mkdir -p ${outputDir}"
-          sh "npm install --production --unsafe-perm -q &> ${outputDir}/npm_install_log"
-          sh "cat ${outputDir}/install_log | grep 'WARN' > ${outputDir}/npm_install_warnings"
-        }
+        sh "mkdir -p ${outputDir}"
+        sh "npm install --production --unsafe-perm -q &> ${outputDir}/npm_install_log"
+        sh "cat ${outputDir}/install_log | grep 'WARN' > ${outputDir}/npm_install_warnings"
         //input(message: 'Manual Security Review', id: 'sec1')
       }
     }
