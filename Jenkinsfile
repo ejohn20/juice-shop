@@ -13,9 +13,11 @@ pipeline {
     stage('Build') {
       steps {
         script{
-          def outputDir = "${env.BUILD_ID}"
-          sh "mkdir /var/build_output/build_${outputDir}"
-          sh "npm install -q --production --unsafe-perm > /var/build_output/build_${outputDir}/install_log 2>&1 | tee -a /var/build_output/build_${outputDir}/install_log"
+          def outputDir = new File( "/var/build_output/build_${env.BUILD_ID}" )
+          if( !folder.exists() ) {
+            outputDir.mkdirs()
+          }
+          sh "npm install -q --production --unsafe-perm &> ${outputDir}/install_log"
         }
         //input(message: 'Manual Security Review', id: 'sec1')
       }
@@ -48,8 +50,12 @@ pipeline {
         }
         stage('Source Clear Dependency Check') {
           steps {
-            sh 'srcclr scan'
-            sh 'srcclr scan --json > scrclr.json'
+            try {
+              sh 'srcclr scan'
+              sh "srcclr scan --json > ${outputDir}/scrclr.json"
+            } catch(Exception e) {
+              currentBuild.result = 'UNSTABLE'
+            } 
           }
         }
       }
