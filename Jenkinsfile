@@ -13,7 +13,7 @@ pipeline {
     stage('Build') {
       steps {
         sh 'npm install --production --unsafe-perm'
-        input(message: 'Manual Security Review', id: 'sec1')
+        //input(message: 'Manual Security Review', id: 'sec1')
       }
     }
     stage('Test') {
@@ -42,17 +42,10 @@ pipeline {
             sh './node_modules/eslint/bin/eslint.js server.js app.js'
           }
         }
-        stage('NPM Dependency Check') {
-          agent {
-            docker {
-              image 'node:9.3'
-              args '-p 4000:3000 -u root'
-            }
-          }
+        stage('Source Clear Dependency Check') {
           steps {
-            sh 'npm install --unsafe-perm dependency-check'
-            sh './node_modules/.bin/dependency-check package.json app.js server.js'
-            sh './node_modules/.bin/dependency-check --unused --ignore package.json app.js server.js'
+            sh 'srcclr scan'
+            sh 'srcclr scan --json > scrclr.json'
           }
         }
       }
