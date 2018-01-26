@@ -15,7 +15,8 @@ pipeline {
       steps {
         script{
           sh "mkdir -p ${env.outputDir}"
-          sh returnStdout: true, script: "npm install --production --unsafe-perm -q -p > ${env.outputDir}/npm_install_log 2>&1"
+          sh returnStdout: true, script: "npm install --production --unsafe-perm -q -p > npm_install.log 2>&1"
+          archiveArtifacts "npm_install.log"
           //sh returnStdout: true, script: "grep 'WARN' ${env.outputDir}/npm_install_log > ${env.outputDir}/npm_install_warnings"
         }
         //input(message: 'Manual Security Review', id: 'sec1')
@@ -23,7 +24,7 @@ pipeline {
     }
     stage('Test') {
       parallel {
-        stage('App Tests') {
+        stage('Acceptance Tests') {
           agent {
             docker {
               image 'node:9.3'
@@ -32,7 +33,8 @@ pipeline {
           }
           steps {
             sh 'npm install --unsafe-perm'
-            sh "npm test > ${env.outputDir}/npm_test_log"
+            sh "npm test > npm_test.log"
+            archiveArtifacts "npm_test.log"
           }
         }
         stage('ESLint Security') {
@@ -44,7 +46,8 @@ pipeline {
           }
           steps {
             sh 'npm install --unsafe-perm eslint-plugin-security'
-            sh "./node_modules/eslint/bin/eslint.js server.js app.js > ${env.outputDir}/eslint_log"
+            sh "./node_modules/eslint/bin/eslint.js server.js app.js > eslint.log"
+            archiveArtifacts "eslint.log"
           }
         }
         stage('Source Clear Dependency Check') {
