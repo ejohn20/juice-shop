@@ -8,6 +8,7 @@ pipeline {
   environment {
     CI = 'true'
     npm_config_cache = 'npm-cache'
+    zapOutputDir = "/var/lib/jenkins/zap_output/build_${env.BUILD_ID}"
   }
   stages {
     stage('Build') {
@@ -15,7 +16,6 @@ pipeline {
         script{
           sh 'npm install --production --unsafe-perm -q -p > npm_install.log'
           archiveArtifacts "npm_install.log"
-          //sh returnStdout: true, script: "grep 'WARN' ${env.outputDir}/npm_install_log > ${env.outputDir}/npm_install_warnings"
         }
         //input(message: 'Manual Security Review', id: 'sec1')
       }
@@ -45,14 +45,14 @@ pipeline {
           steps {
             script{
               try {
-                sh 'npm i -g --unsafe-perm eslint eslint-plugin-standard eslint-plugin-import eslint-config-standard eslint-plugin-security eslint-plugin-node'
+                sh 'npm i -g --unsafe-perm eslint eslint-plugin-standard eslint-plugin-import eslint-config-standard eslint-plugin-security eslint-plugin-node eslint-plugin-promise'
                 sh "eslint --no-eslintrc -c ./.eslintrc.json ."
-                archiveArtifacts "eslint.log"
                 //sh 'npm install --unsafe-perm eslint-plugin-security'
                 //sh "./node_modules/eslint/bin/eslint.js .*js > eslint-security.log"
                 //archiveArtifacts "eslint-security.log"
               } catch(Exception e) {
                 currentBuild.result = 'UNSTABLE'
+                archiveArtifacts "eslint.log"
               }
             }
           }
@@ -63,10 +63,10 @@ pipeline {
               try {
                 withCredentials([string(credentialsId: 'SRCCLR_API_TOKEN', variable: 'SRCCLR_API_TOKEN')]) {
                     sh "srcclr scan --json > srcclr.json"
-                    archiveArtifacts "srcclr.json"
                 }
               } catch(Exception e) {
                 currentBuild.result = 'UNSTABLE'
+                archiveArtifacts "srcclr.json"
               }
             } 
           }
@@ -78,13 +78,15 @@ pipeline {
         script{
           try {
             sh 'pm2 start app --name "Juice-Shop"'
-            sh "docker run -v /var/lib/jenkins/workspace/juice-shop:/zap/wrk/:rw --network='host' -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:3000 -r zap_results.html"
-            archiveArtifacts "zap.log"
+            sh "docker run -v /var/lib/jenkins/workspace/juice-shop:/zap/wrk/:rw --network='host' -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:3000 -r zap_results.html -x zap_results.xml"
+            sh "mkdir -p ${zapOutputDir}"
+            sh "mv /var/lib/jenkins/workspace/juice-shop/zap_results.* ${zapOutputDir}"
           } catch(Exception e) {
             currentBuild.result = 'UNSTABLE'
           } finally {
             sh 'pm2 stop Juice-Shop'
             sh 'pm2 delete Juice-Shop'
+            archiveArtifacts "zap.log"
           }
         }
       }
