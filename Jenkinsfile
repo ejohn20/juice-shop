@@ -78,7 +78,7 @@ pipeline {
         script{
           try {
             sh 'pm2 start app --name "Juice-Shop"'
-            sh "docker run --network='host' -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:3000 -r zap_results.html"
+            sh "docker run -v $(pwd):zap/wrk/:rw --network='host' -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:3000 -r zap_results.html"
             archiveArtifacts "zap.log"
           } catch(Exception e) {
             currentBuild.result = 'UNSTABLE'
