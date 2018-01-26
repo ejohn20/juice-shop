@@ -9,8 +9,7 @@
     ],
     "plugins": [
         "standard",
-        "security",
-        "promise"
+        "security"
     ],
     "rules": {
         "security/detect-buffer-noassert": "warn",
