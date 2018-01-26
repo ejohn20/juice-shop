@@ -47,9 +47,6 @@ pipeline {
               try {
                 sh 'npm i -g --unsafe-perm eslint eslint-plugin-standard eslint-plugin-import eslint-config-standard eslint-plugin-security eslint-plugin-node eslint-plugin-promise'
                 sh "eslint --no-eslintrc -c ./.eslintrc.json . > eslint.log"
-                //sh 'npm install --unsafe-perm eslint-plugin-security'
-                //sh "./node_modules/eslint/bin/eslint.js .*js > eslint-security.log"
-                //archiveArtifacts "eslint-security.log"
               } catch(Exception e) {
                 currentBuild.result = 'UNSTABLE'
               } finally {
