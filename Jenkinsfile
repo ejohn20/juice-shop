@@ -15,8 +15,8 @@ pipeline {
       steps {
         script{
           sh "mkdir -p ${env.outputDir}"
-          sh "npm install --production --unsafe-perm -q 2>&1 | tee ${env.outputDir}/npm_install_log"
-          sh "grep 'WARN' ${env.outputDir}/npm_install_log | tee ${env.outputDir}/npm_install_warnings"
+          sh returnStdout: true, script: "npm install --production --unsafe-perm -q -p > ${env.outputDir}/npm_install_log 2>&1"
+          //sh returnStdout: true, script: "grep 'WARN' ${env.outputDir}/npm_install_log > ${env.outputDir}/npm_install_warnings"
         }
         //input(message: 'Manual Security Review', id: 'sec1')
       }
@@ -27,7 +27,7 @@ pipeline {
           agent {
             docker {
               image 'node:9.3'
-              args "-p 4000:3000 -u root -v ${env.outputDir}:${env.outputDir}"
+              args "-p 4000:3000 -u root"
             }
           }
           steps {
@@ -39,7 +39,7 @@ pipeline {
           agent {
             docker {
               image 'node:9.3'
-              args "-p 4000:3000 -u root -v ${env.outputDir}:${env.outputDir}"
+              args "-p 4000:3000 -u root"
             }
           }
           steps {
