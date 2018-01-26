@@ -81,13 +81,15 @@ pipeline {
           try {
             sh 'pm2 start app --name "Juice-Shop"'
             sh "mkdir -p ${zapOutputDir}"
-            sh "docker run -u root -v ${zapOutputDir}:/zap/wrk/:rw --network='host' -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:3000 -r zap_results.html -x zap_results.xml > zap.log"
+            sh "docker run -u root -v ${zapOutputDir}:/zap/wrk/:rw --network='host' -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:3000 -r zap.html -x zap.xml > zap.log"
           } catch(Exception e) {
             currentBuild.result = 'UNSTABLE'
           } finally {
             sh 'pm2 stop Juice-Shop'
             sh 'pm2 delete Juice-Shop'
             archiveArtifacts "zap.log"
+            archiveArtifacts "${zapOutputDir}/zap.html"
+            archiveArtifacts "${zapOutputDir}/zap.xml"
           }
         }
       }
