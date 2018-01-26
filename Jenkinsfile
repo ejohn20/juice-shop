@@ -43,12 +43,18 @@ pipeline {
             }
           }
           steps {
-            sh 'npm i -g --unsafe-perm eslint eslint-plugin-standard eslint-plugin-import eslint-config-standard eslint-plugin-security'
-            sh "eslint . > eslint.log"
-            archiveArtifacts "eslint.log"
-            //sh 'npm install --unsafe-perm eslint-plugin-security'
-            //sh "./node_modules/eslint/bin/eslint.js .*js > eslint-security.log"
-            //archiveArtifacts "eslint-security.log"
+            script{
+              try {
+                sh 'npm i -g --unsafe-perm eslint eslint-plugin-standard eslint-plugin-import eslint-config-standard eslint-plugin-security eslint-plugin-node'
+                sh "eslint . > eslint.log"
+                archiveArtifacts "eslint.log"
+                //sh 'npm install --unsafe-perm eslint-plugin-security'
+                //sh "./node_modules/eslint/bin/eslint.js .*js > eslint-security.log"
+                //archiveArtifacts "eslint-security.log"
+              } catch(Exception e) {
+                currentBuild.result = 'UNSTABLE'
+              }
+            }
           }
         }
         stage('Source Clear Dependency Check') {
@@ -72,7 +78,7 @@ pipeline {
         script{
           try {
             sh 'pm2 start app --name "Juice-Shop"'
-            sh "docker run --network="host" -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:3000 > zap.log"
+            sh "docker run --network='host' -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:3000 > zap.log"
             archiveArtifacts "zap.log"
           } catch(Exception e) {
             currentBuild.result = 'UNSTABLE'
