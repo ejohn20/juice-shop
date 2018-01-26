@@ -8,7 +8,7 @@ pipeline {
   environment {
     CI = 'true'
     npm_config_cache = 'npm-cache'
-    zapOutputDir = "/var/lib/jenkins/zap_output/build_${env.BUILD_ID}"
+    //zapOutputDir = "/var/lib/jenkins/zap_output/build_${env.BUILD_ID}"
   }
   stages {
     stage('Build') {
@@ -77,16 +77,16 @@ pipeline {
         script{
           try {
             sh 'pm2 start app --name "Juice-Shop"'
-            sh "mkdir -p ${zapOutputDir}"
-            sh "docker run -u root -v ${zapOutputDir}:/zap/wrk/:rw --network='host' -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:3000 -r zap.html -x zap.xml > zap.log"
+            // sh "mkdir -p ${zapOutputDir}"
+            sh "docker run -u root -v /var/lib/jenkins/workspace/juice-shop:/zap/wrk/:rw --network='host' -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:3000 -r zap.html -x zap.xml > zap.log"
           } catch(Exception e) {
             currentBuild.result = 'UNSTABLE'
           } finally {
             sh 'pm2 stop Juice-Shop'
             sh 'pm2 delete Juice-Shop'
             archiveArtifacts "zap.log"
-            archiveArtifacts "${zapOutputDir}/zap.html"
-            archiveArtifacts "${zapOutputDir}/zap.xml"
+            archiveArtifacts "zap.html"
+            archiveArtifacts "zap.xml"
           }
         }
       }
