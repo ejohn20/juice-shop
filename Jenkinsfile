@@ -8,13 +8,11 @@ pipeline {
   environment {
     CI = 'true'
     npm_config_cache = 'npm-cache'
-    outputDir = "/var/lib/jenkins/build_output/build_${env.BUILD_ID}"
   }
   stages {
     stage('Build') {
       steps {
         script{
-          sh "mkdir -p ${env.outputDir}"
           sh 'npm install --production --unsafe-perm -q -p > npm_install.log'
           archiveArtifacts "npm_install.log"
           //sh returnStdout: true, script: "grep 'WARN' ${env.outputDir}/npm_install_log > ${env.outputDir}/npm_install_warnings"
