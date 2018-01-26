@@ -45,11 +45,9 @@ pipeline {
             }
           }
           steps {
-            sh 'npm i -g eslint'
-            sh 'npm i eslint-plugin-standard@latest --save-dev'
-            sh 'npm i --unsafe-perm eslint-plugin-security'
-            sh "eslint . > eslint.log"
-            archiveArtifacts "eslint.log"
+            sh 'npm install --unsafe-perm eslint-plugin-security'
+            sh "./node_modules/eslint/bin/eslint.js . > eslint-security.log"
+            archiveArtifacts "eslint-security.log"
           }
         }
         stage('Source Clear Dependency Check') {
