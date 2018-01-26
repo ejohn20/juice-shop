@@ -35,7 +35,7 @@ pipeline {
             sh "npm test > ${env.outputDir}/npm_test_log"
           }
         }
-        stage('ESLint Test') {
+        stage('ESLint Security') {
           agent {
             docker {
               image 'node:9.3'
@@ -52,7 +52,8 @@ pipeline {
             script{
               try {
                 withCredentials([string(credentialsId: 'SRCCLR_API_TOKEN', variable: 'SRCCLR_API_TOKEN')]) {
-                    sh "srcclr scan --json > ${env.outputDir}/srcclr.json"
+                    sh "srcclr scan --json > srcclr.json"
+                    archiveArtifacts "srcclr.json"
                 }
               } catch(Exception e) {
                 currentBuild.result = 'UNSTABLE'
