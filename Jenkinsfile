@@ -46,7 +46,7 @@ pipeline {
             script{
               try {
                 sh 'npm i -g --unsafe-perm eslint eslint-plugin-standard eslint-plugin-import eslint-config-standard eslint-plugin-security eslint-plugin-node'
-                sh "eslint --no-eslintrc -c ./.eslintrc.json . > eslint.log"
+                sh "eslint --no-eslintrc -c ./.eslintrc.json ."
                 archiveArtifacts "eslint.log"
                 //sh 'npm install --unsafe-perm eslint-plugin-security'
                 //sh "./node_modules/eslint/bin/eslint.js .*js > eslint-security.log"
@@ -78,7 +78,7 @@ pipeline {
         script{
           try {
             sh 'pm2 start app --name "Juice-Shop"'
-            sh "docker run --network='host' -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:3000 > zap.log"
+            sh "docker run --network='host' -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:3000 -r zap_results.html"
             archiveArtifacts "zap.log"
           } catch(Exception e) {
             currentBuild.result = 'UNSTABLE'
