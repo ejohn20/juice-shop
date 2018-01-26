@@ -46,7 +46,7 @@ pipeline {
           }
           steps {
             sh 'npm install --unsafe-perm eslint-plugin-security'
-            sh "./node_modules/eslint/bin/eslint.js . > eslint-security.log"
+            sh "./node_modules/eslint/bin/eslint.js .*js > eslint-security.log"
             archiveArtifacts "eslint-security.log"
           }
         }
