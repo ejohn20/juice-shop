@@ -46,7 +46,7 @@ pipeline {
             script{
               try {
                 sh 'npm i -g --unsafe-perm eslint eslint-plugin-standard eslint-plugin-import eslint-config-standard eslint-plugin-security eslint-plugin-node'
-                sh "eslint . > eslint.log"
+                sh "eslint --no-eslintrc -c ./.eslintrc.json . eslint.log"
                 archiveArtifacts "eslint.log"
                 //sh 'npm install --unsafe-perm eslint-plugin-security'
                 //sh "./node_modules/eslint/bin/eslint.js .*js > eslint-security.log"
