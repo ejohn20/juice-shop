@@ -43,10 +43,7 @@ pipeline {
             }
           }
           steps {
-            sh 'npm i -g --unsafe-perm eslint'
-            sh 'npm i -g --unsafe-perm eslint-plugin-standard'
-            sh 'npm i -g --unsafe-perm eslint-config-standard'
-            sh 'npm i -g --unsafe-perm eslint-plugin-security'
+            sh 'npm i -g --unsafe-perm eslint eslint-plugin-standard eslint-plugin-import eslint-config-standard eslint-plugin-security'
             sh "eslint . > eslint.log"
             archiveArtifacts "eslint.log"
             //sh 'npm install --unsafe-perm eslint-plugin-security'
