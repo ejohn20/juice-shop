@@ -46,12 +46,13 @@ pipeline {
             script{
               try {
                 sh 'npm i -g --unsafe-perm eslint eslint-plugin-standard eslint-plugin-import eslint-config-standard eslint-plugin-security eslint-plugin-node eslint-plugin-promise'
-                sh "eslint --no-eslintrc -c ./.eslintrc.json ."
+                sh "eslint --no-eslintrc -c ./.eslintrc.json . > eslint.log"
                 //sh 'npm install --unsafe-perm eslint-plugin-security'
                 //sh "./node_modules/eslint/bin/eslint.js .*js > eslint-security.log"
                 //archiveArtifacts "eslint-security.log"
               } catch(Exception e) {
                 currentBuild.result = 'UNSTABLE'
+              } finally {
                 archiveArtifacts "eslint.log"
               }
             }
@@ -66,6 +67,7 @@ pipeline {
                 }
               } catch(Exception e) {
                 currentBuild.result = 'UNSTABLE'
+              } finally {
                 archiveArtifacts "srcclr.json"
               }
             } 
@@ -78,9 +80,8 @@ pipeline {
         script{
           try {
             sh 'pm2 start app --name "Juice-Shop"'
-            sh "docker run -v /var/lib/jenkins/workspace/juice-shop:/zap/wrk/:rw --network='host' -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:3000 -r zap_results.html -x zap_results.xml"
             sh "mkdir -p ${zapOutputDir}"
-            sh "mv /var/lib/jenkins/workspace/juice-shop/zap_results.* ${zapOutputDir}"
+            sh "docker run -u root -v ${zapOutputDir}:/zap/wrk/:rw --network='host' -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:3000 -r zap_results.html -x zap_results.xml > zap.log"
           } catch(Exception e) {
             currentBuild.result = 'UNSTABLE'
           } finally {
